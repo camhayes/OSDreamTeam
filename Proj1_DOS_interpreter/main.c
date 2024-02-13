@@ -41,7 +41,6 @@ int getCommandType(char* commandString){
 static bool interrupt_cmd = false;
 
 void handle_interrupt(int signum){
-    interrupt_cmd = true;
     exit(0);
 }
 
@@ -57,7 +56,7 @@ int main() {
     
 
     //main loop, infinite until ctrl^c
-    while(!interrupt_cmd){
+    while(1){
         printf("Type Ctrl-C to exit\n");
         printf("DOS-INTERPRETER>");
         fgets(input, MAX_LINE_LENGTH, stdin);
