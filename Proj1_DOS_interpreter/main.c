@@ -53,14 +53,14 @@ int main() {
 
     struct sigaction act;
     act.sa_handler = handle_interrupt;
-    sigaction(SIGINT, &act, NULL);
+    
 
     //main loop, infinite until ctrl^c
     while(!interrupt_cmd){
         printf("Type Ctrl-C to exit\n");
         printf("DOS-INTERPRETER>");
         fgets(input, MAX_LINE_LENGTH, stdin);
-
+        sigaction(SIGINT, &act, NULL);
         //max two args
 
         cmd = strtok(input, " \n");
