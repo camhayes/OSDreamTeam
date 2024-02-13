@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <stdbool.h>
 #include "commands.h"
+#include "commands.c"
 
 #define MAX_LINE_LENGTH  80
 
@@ -40,7 +41,7 @@ int getCommandType(char* commandString){
 static bool interrupt_cmd = false;
 
 void handle_interrupt(int signum){
-    interrupt_cmd = false;
+    interrupt_cmd = true;
 }
 
 int main() {
@@ -56,7 +57,7 @@ int main() {
 
     //main loop, infinite until ctrl^c
     while(!interrupt_cmd){
-
+        printf("Type Ctrl-C to exit\n");
         printf("DOS-INTERPRETER>");
         fgets(input, MAX_LINE_LENGTH, stdin);
 
@@ -103,6 +104,7 @@ int main() {
                 printf("ERROR: Invalid command\n");
                 break;
         }
+        
 
     }
 }
