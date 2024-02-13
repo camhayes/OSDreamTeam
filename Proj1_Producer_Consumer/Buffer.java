@@ -1,6 +1,6 @@
 public class Buffer 
 {
-	private static final int BUFFER_SIZE = 2;
+	private static final int BUFFER_SIZE = 10; // Use this to change the buffer size, works best with 3-5
     private int[] buffer = new int[BUFFER_SIZE];
     private int count = 0;
 
