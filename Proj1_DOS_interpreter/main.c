@@ -42,6 +42,7 @@ static bool interrupt_cmd = false;
 
 void handle_interrupt(int signum){
     interrupt_cmd = true;
+    exit(0);
 }
 
 int main() {
