@@ -64,6 +64,7 @@ bool checkSafety(int avail[], int max[][R], int allot[][R]) {
         }
 
         if (!found) {
+            printf("Deadlock occurred. Request cannot be granted.\n");
             return false;
         }
     }
@@ -85,9 +86,10 @@ bool requestResources(int process, int request[], int avail[], int max[][R], int
         allot[process][i] += request[i];
         
     }
-    calculateNeed(need, max, allot, avail); // Update need matrix
-
     // Check if system remains in safe state
+    if (!checkSafety(avail, max, allot)){
+        return false;
+    } 
     printf("System is a in a safe state. Request granted.\n");
     return true;
 }
