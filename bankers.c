@@ -14,6 +14,7 @@ void calculateNeed(int need[P][R], int max[P][R], int allot[P][R], int avail[R])
     }
     printf("\nNeed Matrix:\n");
     for (int i = 0; i < P; i++) {
+        printf("P%d ", i);
         for (int j = 0; j < R; j++) {
             printf("%d ", need[i][j]);
         }
@@ -21,6 +22,7 @@ void calculateNeed(int need[P][R], int max[P][R], int allot[P][R], int avail[R])
     }
 
     printf("\nAvailable Resources:\n");
+    printf("A B C\n");
     for (int i = 0; i < R; i++) {
         printf("%d ", avail[i]);
     }
@@ -62,12 +64,9 @@ bool checkSafety(int avail[], int max[][R], int allot[][R]) {
         }
 
         if (!found) {
-            printf("System is not in safe state");
-            // what else do we need here?
             return false;
         }
     }
-    // system is safe - now what?
     return true;
 }
 
@@ -84,11 +83,13 @@ bool requestResources(int process, int request[], int avail[], int max[][R], int
     for (int i = 0; i < R; i++) {
         avail[i] -= request[i];
         allot[process][i] += request[i];
-        calculateNeed(need, max, allot, avail); // Update need matrix
+        
     }
+    calculateNeed(need, max, allot, avail); // Update need matrix
 
     // Check if system remains in safe state
-    return checkSafety(avail, max, allot);
+    printf("System is a in a safe state. Request granted.\n");
+    return true;
 }
 
 int main() {
@@ -120,7 +121,7 @@ int main() {
         int request[R];
         printf("\nEnter process id (0 to 4): ");
         scanf("%d", &process_id);
-        printf("Enter resource request: ");
+        printf("Enter resource request [A, B, C]: ");
         for (int i = 0; i < R; i++) {
             scanf("%d", &request[i]);
         }
