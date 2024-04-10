@@ -4,19 +4,32 @@
 #define P 5 // # of processes
 #define R 3 // # of resources
 
-void calculateNeed(int need[P][R], int max[P][R], int allot[P][R]) {
+int need[P][R];
+
+void calculateNeed(int need[P][R], int max[P][R], int allot[P][R], int avail[R]) {
     for (int i = 0; i < P; i++) {
         for (int j = 0; j < R; j++) {
             need[i][j] = max[i][j] - allot[i][j];
         }
     }
+    printf("\nNeed Matrix:\n");
+    for (int i = 0; i < P; i++) {
+        for (int j = 0; j < R; j++) {
+            printf("%d ", need[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("\nAvailable Resources:\n");
+    for (int i = 0; i < R; i++) {
+        printf("%d ", avail[i]);
+    }
+    printf("\n");
 }
 
-bool checkSafety(int processes[], int avail[], int max[][R], int allot[][R]) {
-    int need[P][R];
-    
+bool checkSafety(int avail[], int max[][R], int allot[][R]) {
     // calculate need matrix
-    calculateNeed(need, max, allot);
+    calculateNeed(need, max, allot, avail);
 
     bool finish[P] = {0}; // array of falses
     int safeSeq[P];
@@ -58,6 +71,26 @@ bool checkSafety(int processes[], int avail[], int max[][R], int allot[][R]) {
     return true;
 }
 
+bool requestResources(int process, int request[], int avail[], int max[][R], int allot[][R]) {
+    // Check if request can be granted
+    for (int i = 0; i < R; i++) {
+        if (request[i] > avail[i] || request[i] > max[process][i] - allot[process][i]) {
+            printf("Request cannot be granted.\n");
+            return false;
+        }
+    }
+
+    // Try to allocate resources
+    for (int i = 0; i < R; i++) {
+        avail[i] -= request[i];
+        allot[process][i] += request[i];
+        calculateNeed(need, max, allot, avail); // Update need matrix
+    }
+
+    // Check if system remains in safe state
+    return checkSafety(avail, max, allot);
+}
+
 int main() {
     int processes[] = {0, 1, 2, 3, 4};
     int avail[] = {3, 3, 2};
@@ -78,11 +111,21 @@ int main() {
         {2, 1, 1},
         {0, 0, 2}
     };
-    
+
     // resource allocation here?
 
     // Check system is in safe state or not
-    checkSafety(processes, avail, max, alloc);
+    if (checkSafety(avail, max, alloc)) {
+        int process_id;
+        int request[R];
+        printf("\nEnter process id (0 to 4): ");
+        scanf("%d", &process_id);
+        printf("Enter resource request: ");
+        for (int i = 0; i < R; i++) {
+            scanf("%d", &request[i]);
+        }
+        requestResources(process_id, request, avail, max, alloc);
+    }
 
     return 0;
 }
